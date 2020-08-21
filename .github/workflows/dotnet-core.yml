@@ -17,15 +17,24 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.301
+
     - name: Build Windows binary
-      run: dotnet publish --runtime win-x64 --configuration Release --self-contained --output artifacts/win-x64
-    - name: Build Linux binary (full)
-      run: dotnet publish --runtime linux-x64 --configuration Release --self-contained --output artifacts/linux-x64
-    - name: Build Linux binary (musl)
-      run: dotnet publish --runtime linux-musl-x64 --configuration Release --self-contained --output artifacts/linux-musl-x64
-      
-    - name: Upload all artifacts
-      uses: actions/upload-artifact@v2
+      run: dotnet publish --runtime win-x64 --configuration Release --output artifacts/win-x64 /p:PublishSingleFile=true Floofbot/Floofbot.csproj
+    - run: zip artifacts/win-x64/FloofBot_win-x64.zip artifacts/win-x64/Floofbot.exe
+    - uses: actions/upload-artifact@v2
       with:
-        name: all_artifacts
-        path: artifacts/ # or path/to/artifact
+        path: artifacts/win-x64/FloofBot_win-x64.zip
+    
+    - name: Build Linux binary (full)
+      run: dotnet publish --runtime linux-x64 --configuration Release --output artifacts/linux-x64 /p:PublishSingleFile=true Floofbot/Floofbot.csproj
+    - run: tar -czf artifacts/linux-x64/FloofBot_linux-x64.tar.gz artifacts/linux-x64/Floofbot
+    - uses: actions/upload-artifact@v2
+      with:
+        path: artifacts/linux-x64/FloofBot_linux-x64.tar.gz
+
+    - name: Build Linux binary (musl)
+      run: dotnet publish --runtime linux-musl-x64 --configuration Release --output artifacts/linux-musl-x64 /p:PublishSingleFile=true Floofbot/Floofbot.csproj
+    - run: tar -czf artifacts/linux-musl-x64/FloofBot_linux-musl-x64.tar.gz artifacts/linux-musl-x64/Floofbot
+    - uses: actions/upload-artifact@v2
+      with:
+        path: artifacts/linux-musl-x64/FloofBot_linux-musl-x64.tar.gz
