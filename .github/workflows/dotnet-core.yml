@@ -23,6 +23,7 @@ jobs:
     - run: zip artifacts/win-x64/FloofBot_win-x64.zip artifacts/win-x64/Floofbot.exe
     - uses: actions/upload-artifact@v2
       with:
+        name: FloofBot_win-x64.zip
         path: artifacts/win-x64/FloofBot_win-x64.zip
     
     - name: Build Linux binary (full)
@@ -30,6 +31,7 @@ jobs:
     - run: tar -czf artifacts/linux-x64/FloofBot_linux-x64.tar.gz artifacts/linux-x64/Floofbot
     - uses: actions/upload-artifact@v2
       with:
+        name: FloofBot_linux-x64.tar.gz
         path: artifacts/linux-x64/FloofBot_linux-x64.tar.gz
 
     - name: Build Linux binary (musl)
@@ -37,4 +39,5 @@ jobs:
     - run: tar -czf artifacts/linux-musl-x64/FloofBot_linux-musl-x64.tar.gz artifacts/linux-musl-x64/Floofbot
     - uses: actions/upload-artifact@v2
       with:
+        name: FloofBot_linux-musl-x64.tar.gz
         path: artifacts/linux-musl-x64/FloofBot_linux-musl-x64.tar.gz
