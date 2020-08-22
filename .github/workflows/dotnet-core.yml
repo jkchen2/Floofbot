@@ -38,3 +38,8 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         path: artifacts/linux-musl-x64/FloofBot_linux-musl-x64.tar.gz
+        
+    - name: Upload sample config
+      uses: actions/upload-artifact@v2
+      with:
+        path: Floofbot/app.config.sample
