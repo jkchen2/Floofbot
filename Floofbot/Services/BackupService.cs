@@ -33,7 +33,7 @@ namespace Floofbot.Services
                 {
                     targetDelay += 86400;
                 }
-                await Task.Delay(30);
+                await Task.Delay(30000);
                 System.Diagnostics.Process backupProcess = new System.Diagnostics.Process();
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
