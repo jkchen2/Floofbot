@@ -3,14 +3,16 @@ using System;
 using Floofbot.Services.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Floofbot.Migrations
 {
     [DbContext(typeof(FloofDataContext))]
-    partial class FloofDataContextModelSnapshot : ModelSnapshot
+    [Migration("20200821111952_ErrorLogging")]
+    partial class ErrorLogging
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,7 +61,7 @@ namespace Floofbot.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<ulong?>("ChannelId")
+                    b.Property<ulong>("ChannelId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsOn")
@@ -194,35 +196,6 @@ namespace Floofbot.Migrations
                     b.HasKey("ServerId");
 
                     b.ToTable("NicknameAlertConfigs");
-                });
-
-            modelBuilder.Entity("Floofbot.Services.Repository.Models.RaidProtectionConfig", b =>
-                {
-                    b.Property<ulong>("ServerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("BanOffenders")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<ulong?>("ExceptionRoleId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<ulong?>("ModChannelId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<ulong?>("ModRoleId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<ulong?>("MutedRoleId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ServerId");
-
-                    b.ToTable("RaidProtectionConfigs");
                 });
 
             modelBuilder.Entity("Floofbot.Services.Repository.Models.Tag", b =>

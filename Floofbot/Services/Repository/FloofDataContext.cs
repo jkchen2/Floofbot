@@ -1,4 +1,5 @@
-﻿using Floofbot.Services.Repository.Models;
+﻿using Floofbot.Configs;
+using Floofbot.Services.Repository.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Floofbot.Services.Repository
@@ -27,12 +28,13 @@ namespace Floofbot.Services.Repository
         public virtual DbSet<UserNote> UserNotes { get; set; }
         public virtual DbSet<BanOnJoin> BansOnJoin { get; set; }
         public virtual DbSet<ModMail> ModMails { get; set; }
-
+        public virtual DbSet<ErrorLogging> ErrorLoggingConfigs { get; set; }
+        public virtual DbSet<RaidProtectionConfig> RaidProtectionConfigs { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite("DataSource=floofData.db");
+                optionsBuilder.UseSqlite("DataSource=" + BotConfigFactory.Config.DbPath);
             }
         }
     }
