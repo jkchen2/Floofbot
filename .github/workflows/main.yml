@@ -68,25 +68,16 @@ jobs:
     ## TODO: Finish
     - name: Get new release message
       shell: bash
-      run: echo "${{ github.event.commits[0] }}"
+      run: echo "${{ toJSON(github.event.commits) }}"
 
-    ## TODO: remove debug
-    - name: DEBUG pwd
+    - name: Get new release message
       shell: bash
-      run: echo "$(pwd)"
+      run: echo -e "${{ join(github.event.commits.*.url, '\n') }}"
 
     - name: Download built artifacts
       uses: actions/download-artifact@v2
       with:
         name: build_artifacts
-
-    - name: Unpack artifact zip
-      shell: bash
-      run: pwd && ls -la && unzip build_artifacts
-
-    - name: DEBUG ls
-      shell: bash
-      run: ls -la
 
     - name: Create release
       id: create_release
