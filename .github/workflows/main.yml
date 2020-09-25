@@ -79,15 +79,14 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: build_artifacts
-        path: artifacts.zip
 
     - name: Unpack artifact zip
       shell: bash
-      run: pwd && ls -la && file `pwd`/artifacts.zip && unzip `pwd`/artifacts.zip
+      run: pwd && ls -la && unzip build_artifacts
 
     - name: DEBUG ls
       shell: bash
-      run: echo $(ls)
+      run: ls -la
 
     - name: Create release
       id: create_release
