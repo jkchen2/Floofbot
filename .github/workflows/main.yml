@@ -83,7 +83,7 @@ jobs:
 
     - name: Unpack artifact zip
       shell: bash
-      run: pwd && ls && unzip `pwd`/artifacts.zip
+      run: pwd && ls -la && file `pwd`/artifacts.zip && unzip `pwd`/artifacts.zip
 
     - name: DEBUG ls
       shell: bash
