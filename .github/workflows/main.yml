@@ -81,14 +81,9 @@ jobs:
         name: build_artifacts
         path: artifacts.zip
 
-    ## TODO: remove debug
-    - name: DEBUG ls
-      shell: bash
-      run: echo $(ls -la)
-
     - name: Unpack artifact zip
       shell: bash
-      run: pwd && ls && unzip artifacts.zip
+      run: pwd && ls && unzip `pwd`/artifacts.zip
 
     - name: DEBUG ls
       shell: bash
