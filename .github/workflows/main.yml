@@ -75,15 +75,16 @@ jobs:
       shell: bash
       run: echo "$(pwd)"
 
-    - name: DEBUG ls
-      shell: bash
-      run: echo $(ls)
-
     - name: Download built artifacts
       uses: actions/download-artifact@v2
       with:
         name: build_artifacts
         path: artifacts.zip
+
+    ## TODO: remove debug
+    - name: DEBUG ls
+      shell: bash
+      run: echo $(ls -la)
 
     - name: Unpack artifact zip
       shell: bash
