@@ -48,6 +48,10 @@ jobs:
         name: build_artifacts
         path: Floofbot/app.config.sample
 
+    ## TODO: Remove
+    - name: Debug
+      run: echo ${{ github.event.action }} && echo ${{ github.event.ref }}
+
   ## Pulls build artifacts and creates a new release from them
   release:
     needs: build
