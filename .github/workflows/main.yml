@@ -60,7 +60,7 @@ jobs:
     - name: Get new release number
       shell: bash
       run: curl --silent https://api.github.com/repos/${{ github.repository }}/releases/latest | \
-        python -c "\
+        python3 -c "\
           import sys, json, datetime; \
           cur_version = json.load(sys.stdin)['name'].rsplit('.', 1); \
           new_version = datetime.datetime.utcnow().strftime('%Y.%m.%d'), -1; \
