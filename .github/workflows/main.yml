@@ -50,12 +50,12 @@ jobs:
 
     ## TODO: Remove
     - name: Debug
-      run: echo ${{ github.event.action }} && echo ${{ github.event.ref }}
+      run: echo ${{ github.event_name }} && echo ${{ github.ref }}
 
   ## Pulls build artifacts and creates a new release from them
   release:
     needs: build
-    if: github.event.action == 'push' && github.event.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
     - name: Get new release number
