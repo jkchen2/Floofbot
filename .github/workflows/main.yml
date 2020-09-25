@@ -65,15 +65,6 @@ jobs:
         base, patch = new_version if new_version[0] != cur_version[0] else cur_version;
         print(f'::set-env name=NEW_VERSION::{base}.{int(patch) + 1}')"
 
-    ## TODO: Finish
-    - name: Get new release message
-      shell: bash
-      run: echo "${{ toJSON(github.event.commits) }}"
-
-    - name: Get new release message
-      shell: bash
-      run: echo -e "${{ join(github.event.commits.*.url, '\n') }}"
-
     - name: Download built artifacts
       uses: actions/download-artifact@v2
       with:
