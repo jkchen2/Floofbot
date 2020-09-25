@@ -78,7 +78,7 @@ jobs:
       with:
         tag_name: ${{ env.NEW_VERSION }}
         release_name: ${{ env.NEW_VERSION }}
-        body: "This release includes changes from the following commits: ${{ github.event.commits }}"
+        body: "This release includes changes from the following commits:\n\n${{ join(github.event.commits.*.url, '\n') }}"
         draft: false
         prerelease: false
 
@@ -121,6 +121,3 @@ jobs:
         asset_path: app.config.sample
         asset_name: app.config.sample
         asset_content_type: text/plain
-
-    ## TODO:
-    # - name: Fire webhook
