@@ -12,13 +12,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.7'
 
     - name: Python test
       shell: bash
       run: python3 -c "print('test')"
+
+    - name: Get new release number
+      shell: bash
+      run: curl --silent https://api.github.com/repos/${{ github.repository }}/releases/latest | python3 -c "import sys, json, datetime; cur_version = json.load(sys.stdin)['name'].rsplit('.', 1); new_version = datetime.datetime.utcnow().strftime('%Y.%m.%d'), -1; base, patch = new_version if new_version[0] != cur_version[0] else cur_version; print(f'::set-env name=NEW_VERSION::{base}.{int(patch) + 1}')"
 
     - uses: actions/checkout@v2
     - name: Setup .NET Core
