@@ -51,7 +51,7 @@ jobs:
   ## Pulls build artifacts and creates a new release from them
   release:
     needs: build
-    if: github.event.action == "push" && github.event.ref == "refs/heads/master"
+    if: github.event.action == 'push' && github.event.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
     - name: Get new release number
