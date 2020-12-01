@@ -11,7 +11,7 @@ WORKDIR /root/
 RUN mkdir data
 
 # Copy files
-COPY Floofbot/Floofbot/Scripts/LinuxDBBackup.sh .
+COPY Floofbot/Scripts/LinuxDBBackup.sh .
 COPY artifacts/linux-musl-x64/Floofbot .
 
 # Fix for running in a container
