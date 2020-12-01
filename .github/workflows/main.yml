@@ -78,7 +78,7 @@ jobs:
 
     - name: Extract build binary
       shell: bash
-      run: 'mkdir -p artifacts/linux-musl-x64 && tar -C artifacts/linux-musl-x64 -xf Floofbot_linux-musl-x64.tar.gz''
+      run: 'mkdir -p artifacts/linux-musl-x64 && tar -C artifacts/linux-musl-x64 -xf Floofbot_linux-musl-x64.tar.gz'
 
     - name: Create release
       id: create_release
