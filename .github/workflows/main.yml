@@ -134,7 +134,7 @@ jobs:
   ## Uploads a new Docker image of the build. Requires the release step for the version variable
   release_image:
     needs: release
-    if: needs.release.outputs.cr_pat_exists == "true"
+    if: needs.release.outputs.cr_pat_exists == 'true'
     runs-on: ubuntu-latest
     steps:
 
