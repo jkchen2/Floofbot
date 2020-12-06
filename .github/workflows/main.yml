@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  cr_pat_exists: "false"
+
 jobs:
 
   ## Builds artifacts for 3 targets and uploads artifacts
@@ -68,6 +71,10 @@ jobs:
         base, patch = new_version if new_version[0] != cur_version[0] else cur_version;
         print(f'::set-env name=NEW_VERSION::{base}.{int(patch) + 1}')"
 
+    - name: Set secret existence variable
+      if: secrets.CR_PAT
+      run: echo 'cr_pat_exists=true' >> $GITHUB_ENV
+
     - name: Download built artifacts
       uses: actions/download-artifact@v2
       with:
@@ -125,11 +132,10 @@ jobs:
         asset_name: config.yaml.sample
         asset_content_type: text/plain
 
-
   ## Uploads a new Docker image of the build. Requires the release step for the version variable
   release_image:
     needs: release
-    if: secrets.CR_PAT
+    if: env.cr_pat_exists == "true"
     runs-on: ubuntu-latest
     steps:
 
