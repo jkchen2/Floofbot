@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ master ]
 
-env:
-  cr_pat_exists: "false"
-
 jobs:
 
   ## Builds artifacts for 3 targets and uploads artifacts
@@ -57,6 +54,8 @@ jobs:
     needs: build
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    outputs:
+      cr_pat_exists: ${{ steps.pat_check.outputs.cr_pat_exists }}
     steps:
 
     - name: Get new release number
@@ -72,10 +71,8 @@ jobs:
         print(f'::set-env name=NEW_VERSION::{base}.{int(patch) + 1}')"
 
     - name: Set secret existence variable
-      run: |
-        if [ ! -z "${{ secrets.CR_PAT }}" ]; then
-        echo 'cr_pat_exists=true' >> $GITHUB_ENV
-        fi
+      id: pat_check
+      run: echo "::set-output name=cr_pat_exists::$([ -z "${{ secrets.CR_PAT }}" ] && echo "false" || echo "true")"
 
     - name: Download built artifacts
       uses: actions/download-artifact@v2
@@ -137,7 +134,7 @@ jobs:
   ## Uploads a new Docker image of the build. Requires the release step for the version variable
   release_image:
     needs: release
-    if: env.cr_pat_exists == "true"
+    if: needs.release.outputs.cr_pat_exists == "true"
     runs-on: ubuntu-latest
     steps:
 
