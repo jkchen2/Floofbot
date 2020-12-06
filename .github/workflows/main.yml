@@ -56,9 +56,11 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       cr_pat_exists: ${{ steps.pat_check.outputs.cr_pat_exists }}
+      new_release_version: ${{ steps.get_new_release_version.outputs.new_version }}
     steps:
 
-    - name: Get new release number
+    - name: Get new release version
+      id: get_new_release_version
       shell: bash
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
@@ -68,7 +70,7 @@ jobs:
         cur_version = json.load(sys.stdin).get('name', '0.0.0.0').rsplit('.', 1);
         new_version = datetime.datetime.utcnow().strftime('%Y.%m.%d'), -1;
         base, patch = new_version if new_version[0] != cur_version[0] else cur_version;
-        print(f'::set-env name=NEW_VERSION::{base}.{int(patch) + 1}')"
+        print('::set-env name=NEW_VERSION::{0}\n::set-output name=new_version::{0}'.format(f'{base}.{int(patch) + 1}'))"
 
     - name: Set secret existence variable
       id: pat_check
@@ -169,4 +171,4 @@ jobs:
         push: true
         tags: |
           ghcr.io/${{ github.repository_owner }}/floofbot:latest
-          ghcr.io/${{ github.repository_owner }}/floofbot:${{ env.NEW_VERSION }}
+          ghcr.io/${{ github.repository_owner }}/floofbot:${{ needs.release.outputs.new_release_version }}
