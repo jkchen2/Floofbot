@@ -56,9 +56,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Checkout repository for Dockerfile and scripts
-      uses: actions/checkout@v2
-
     - name: Get new release number
       shell: bash
       env:
@@ -127,6 +124,22 @@ jobs:
         asset_path: config.yaml.sample
         asset_name: config.yaml.sample
         asset_content_type: text/plain
+
+
+  ## Uploads a new Docker image of the build. Requires the release step for the version variable
+  release_image:
+    needs: release
+    if: secrets.CR_PAT
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout repository for Dockerfile and scripts
+      uses: actions/checkout@v2
+
+    - name: Download built artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: build_artifacts
 
     - name: Extract build binary
       shell: bash
