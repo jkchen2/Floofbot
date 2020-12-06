@@ -72,8 +72,10 @@ jobs:
         print(f'::set-env name=NEW_VERSION::{base}.{int(patch) + 1}')"
 
     - name: Set secret existence variable
-      if: secrets.CR_PAT
-      run: echo 'cr_pat_exists=true' >> $GITHUB_ENV
+      run: |
+        if [ ! -z "${{ secrets.CR_PAT }}" ]; then
+        echo 'cr_pat_exists=true' >> $GITHUB_ENV
+        fi
 
     - name: Download built artifacts
       uses: actions/download-artifact@v2
