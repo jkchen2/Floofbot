@@ -22,4 +22,4 @@ ARG floofbot_version=unknown
 ENV FLOOFBOT_VERSION=$floofbot_version
 
 ENTRYPOINT ["./Floofbot"]
-CMD ["data/config.yaml"]
+CMD ["/root/data/config.yaml"]
