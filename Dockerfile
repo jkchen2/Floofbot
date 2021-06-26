@@ -3,8 +3,8 @@
 
 FROM alpine:latest
 
-# Dependencies and curl for custom backup scripts
-RUN apk add --no-cache libintl libstdc++ curl
+# Dependencies and curl/jq for custom backup scripts
+RUN apk add --no-cache libintl libstdc++ curl jq
 
 # Set and add working directory
 WORKDIR /root/
