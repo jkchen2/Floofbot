@@ -25,7 +25,7 @@ jobs:
     - run: zip -j artifacts/win-x64/Floofbot_win-x64.zip artifacts/win-x64/Floofbot.exe artifacts/win-x64/e_sqlite3.dll
     - uses: actions/upload-artifact@v4.6.2
       with:
-        name: build_artifacts
+        name: build_artifacts-windows
         path: artifacts/win-x64/Floofbot_win-x64.zip
     
     - name: Build Linux binary (full)
@@ -33,7 +33,7 @@ jobs:
     - run: tar -czf artifacts/linux-x64/Floofbot_linux-x64.tar.gz -C artifacts/linux-x64 Floofbot libe_sqlite3.so
     - uses: actions/upload-artifact@v4.6.2
       with:
-        name: build_artifacts
+        name: build_artifacts-linux
         path: artifacts/linux-x64/Floofbot_linux-x64.tar.gz
 
     - name: Build Linux binary (musl)
@@ -47,7 +47,7 @@ jobs:
     - name: Upload sample config
       uses: actions/upload-artifact@v4.6.2
       with:
-        name: build_artifacts
+        name: build_artifacts-linux-musl
         path: Floofbot/config.yaml.sample
 
   ## Pulls build artifacts and creates a new release from them
@@ -75,7 +75,8 @@ jobs:
     - name: Download built artifacts
       uses: actions/download-artifact@v4.1.7
       with:
-        name: build_artifacts
+        name: build_artifacts-*
+        merge-multiple: true
 
     - name: Create release
       uses: softprops/action-gh-release@v2
@@ -103,7 +104,7 @@ jobs:
     - name: Download built artifacts
       uses: actions/download-artifact@v4.1.7
       with:
-        name: build_artifacts
+        name: build_artifacts-linux-musl
 
     - name: Extract build binary
       shell: bash
