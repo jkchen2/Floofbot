@@ -23,7 +23,7 @@ jobs:
     - name: Build Windows binary
       run: dotnet publish --runtime win-x64 --configuration Release --output artifacts/win-x64 /p:PublishSingleFile=true Floofbot/Floofbot.csproj
     - run: zip -j artifacts/win-x64/Floofbot_win-x64.zip artifacts/win-x64/Floofbot.exe artifacts/win-x64/e_sqlite3.dll
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4.6.2
       with:
         name: build_artifacts
         path: artifacts/win-x64/Floofbot_win-x64.zip
@@ -31,7 +31,7 @@ jobs:
     - name: Build Linux binary (full)
       run: dotnet publish --runtime linux-x64 --configuration Release --output artifacts/linux-x64 /p:PublishSingleFile=true Floofbot/Floofbot.csproj
     - run: tar -czf artifacts/linux-x64/Floofbot_linux-x64.tar.gz -C artifacts/linux-x64 Floofbot libe_sqlite3.so
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4.6.2
       with:
         name: build_artifacts
         path: artifacts/linux-x64/Floofbot_linux-x64.tar.gz
@@ -39,13 +39,13 @@ jobs:
     - name: Build Linux binary (musl)
       run: dotnet publish --runtime linux-musl-x64 --configuration Release --output artifacts/linux-musl-x64 /p:PublishSingleFile=true Floofbot/Floofbot.csproj
     - run: tar -czf artifacts/linux-musl-x64/Floofbot_linux-musl-x64.tar.gz -C artifacts/linux-musl-x64 Floofbot libe_sqlite3.so
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4.6.2
       with:
         name: build_artifacts
         path: artifacts/linux-musl-x64/Floofbot_linux-musl-x64.tar.gz
         
     - name: Upload sample config
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4.6.2
       with:
         name: build_artifacts
         path: Floofbot/config.yaml.sample
@@ -78,56 +78,18 @@ jobs:
         name: build_artifacts
 
     - name: Create release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
       with:
+        name: ${{ env.NEW_VERSION }}
         tag_name: ${{ env.NEW_VERSION }}
-        release_name: ${{ env.NEW_VERSION }}
         body: "This release includes changes from the following commits:\n\n${{ join(github.event.commits.*.url, '\n') }}"
         draft: false
         prerelease: false
-
-    - name: Upload release assets (Windows)
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: Floofbot_win-x64.zip
-        asset_name: Floofbot_win-x64.zip
-        asset_content_type: application/zip
-
-    - name: Upload release assets (Linux)
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: Floofbot_linux-x64.tar.gz
-        asset_name: Floofbot_linux-x64.tar.gz
-        asset_content_type: application/gzip
-
-    - name: Upload release assets (Linux musl)
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: Floofbot_linux-musl-x64.tar.gz
-        asset_name: Floofbot_linux-musl-x64.tar.gz
-        asset_content_type: application/gzip
-
-    - name: Upload release assets (config file)
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: config.yaml.sample
-        asset_name: config.yaml.sample
-        asset_content_type: text/plain
+        files: |
+          Floofbot_win-x64.zip
+          Floofbot_linux-x64.tar.gz
+          Floofbot_linux-musl-x64.tar.gz
+          config.yaml.sample
 
   ## Uploads a new Docker image of the build. Requires the release step for the version variable
   release_image:
