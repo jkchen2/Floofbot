@@ -68,14 +68,14 @@ jobs:
         curl --silent https://api.github.com/repos/${{ github.repository }}/releases/latest | python3 -c
         "import sys, json, datetime;
         cur_version = json.load(sys.stdin).get('name', '0.0.0.0').rsplit('.', 1);
-        new_version = datetime.datetime.utcnow().strftime('%Y.%m.%d'), -1;
+        new_version = datetime.datetime.now(datetime.UTC).strftime('%Y.%m.%d'), -1;
         base, patch = new_version if new_version[0] != cur_version[0] else cur_version;
         print('::set-env name=NEW_VERSION::{0}\n::set-output name=new_version::{0}'.format(f'{base}.{int(patch) + 1}'))"
 
     - name: Download built artifacts
       uses: actions/download-artifact@v4.1.7
       with:
-        name: build_artifacts-*
+        pattern: build_artifacts-*
         merge-multiple: true
 
     - name: Create release
