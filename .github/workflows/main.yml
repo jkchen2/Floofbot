@@ -23,7 +23,7 @@ jobs:
     - name: Build Windows binary
       run: dotnet publish --runtime win-x64 --configuration Release --output artifacts/win-x64 /p:PublishSingleFile=true Floofbot/Floofbot.csproj
     - run: zip -j artifacts/win-x64/Floofbot_win-x64.zip artifacts/win-x64/Floofbot.exe artifacts/win-x64/e_sqlite3.dll
-    - uses: actions/upload-artifact@v4.6.2
+    - uses: actions/upload-artifact@v4
       with:
         name: build_artifacts-windows
         path: artifacts/win-x64/Floofbot_win-x64.zip
@@ -31,7 +31,7 @@ jobs:
     - name: Build Linux binary (full)
       run: dotnet publish --runtime linux-x64 --configuration Release --output artifacts/linux-x64 /p:PublishSingleFile=true Floofbot/Floofbot.csproj
     - run: tar -czf artifacts/linux-x64/Floofbot_linux-x64.tar.gz -C artifacts/linux-x64 Floofbot libe_sqlite3.so
-    - uses: actions/upload-artifact@v4.6.2
+    - uses: actions/upload-artifact@v4
       with:
         name: build_artifacts-linux
         path: artifacts/linux-x64/Floofbot_linux-x64.tar.gz
@@ -39,15 +39,15 @@ jobs:
     - name: Build Linux binary (musl)
       run: dotnet publish --runtime linux-musl-x64 --configuration Release --output artifacts/linux-musl-x64 /p:PublishSingleFile=true Floofbot/Floofbot.csproj
     - run: tar -czf artifacts/linux-musl-x64/Floofbot_linux-musl-x64.tar.gz -C artifacts/linux-musl-x64 Floofbot libe_sqlite3.so
-    - uses: actions/upload-artifact@v4.6.2
+    - uses: actions/upload-artifact@v4
       with:
-        name: build_artifacts
+        name: build_artifacts-linux-musl
         path: artifacts/linux-musl-x64/Floofbot_linux-musl-x64.tar.gz
         
     - name: Upload sample config
-      uses: actions/upload-artifact@v4.6.2
+      uses: actions/upload-artifact@v4
       with:
-        name: build_artifacts-linux-musl
+        name: build_artifacts-config
         path: Floofbot/config.yaml.sample
 
   ## Pulls build artifacts and creates a new release from them
@@ -73,7 +73,7 @@ jobs:
         print('::set-env name=NEW_VERSION::{0}\n::set-output name=new_version::{0}'.format(f'{base}.{int(patch) + 1}'))"
 
     - name: Download built artifacts
-      uses: actions/download-artifact@v4.1.7
+      uses: actions/download-artifact@v4
       with:
         pattern: build_artifacts-*
         merge-multiple: true
@@ -102,7 +102,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Download built artifacts
-      uses: actions/download-artifact@v4.1.7
+      uses: actions/download-artifact@v4
       with:
         name: build_artifacts-linux-musl
 
